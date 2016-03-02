@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Transactional file access</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Transactional file access">
+ <p>Sometimes it may be desirable to save a single file or even a
+ number of related files to the file system atomically. This means if
+ you write something and an error occurs or for any reason you change
+ your mind and rather want to cancel what you did. Consider your
+ application fails in the middle of overwriting important data which
+ neither gives you the old state nor the new one, but rather a
+ corrupted one. Or only part of your data has been written leaving you
+ with an inconsistent state.</p> 
+
+<p>The <a
+href="../apidocs/org/apache/commons/transaction/file/package-summary.html">transactional
+file</a> package provides you with code that allows you to have atomic
+read and write operations on any file system. The <a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html">file
+resource manager</a> offers you the possibility to isolate a number of
+operations on a set of files in a transaction. Using the <a
+href="../locks/index.html">locks package</a> it is able to offer you
+full ACID transactions including serializability. Of course to make this
+work all access to the managed files must be done by this
+manager. Direct access to the file system can <em>not</em> be
+monitored by the manager.</p>
+
+<p>When you <a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html#startTransaction(java.lang.Object)">start</a>
+a transaction you need to provide an indentifier to later refer to
+this newly started transaction. You can also let an identifier be <a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html#generatedUniqueTxId()">generated</a>
+for you. Calls to e.g. <a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html#readResource(java.lang.Object,%20java.lang.Object)">read</a>,
+<a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html#createResource(java.lang.Object,%20java.lang.Object)">create</a>
+or <a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html#writeResource(java.lang.Object,%20java.lang.Object)">write
+to</a> will need the identifier to know which transaction they belong to.</p> 
+
+<p>Finally when you want to
+commit the transaction call <a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html#commitTransaction(java.lang.Object)">commit</a>
+or <a
+href="../apidocs/org/apache/commons/transaction/file/FileResourceManager.html#rollbackTransaction(java.lang.Object)">rollback</a>
+to undo all changes. The transactionality is achieved by first writing to
+temporary files and upon commit moving or copying them to the primary
+location. Locks and a delicate commit mechanism will assure that no
+data corruption occurs.
+</p>
+
+<p>A fail safe <a
+href="../apidocs/org/apache/commons/transaction/file/FileSequence.html">file
+sequence</a> is the second main part of the file package. Just like
+sequences known from Oracle or other relational database systems it
+provides you with a unique ids. Each call to the <a
+href="../apidocs/org/apache/commons/transaction/file/FileSequence.html#nextSequenceValueBottom(java.lang.String,%20long)">next</a>
+method will return a new unique long number and persists the current
+value of the sequence to disk. This means when you shut down your
+system and restart it you will still get no double
+numbers, but the sequence will continue. Additionally, this sequence implementation is fail safe which
+means when an error occurs while saving the value of the sequence to
+disk you still are guaranteed not to get any double values. The file
+containing the value is guaranteed not to be corrupted as well. 
+</p>
+</section>
+
+</body>
+</document>

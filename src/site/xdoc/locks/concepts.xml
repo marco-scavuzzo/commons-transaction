@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Transaction concepts</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Transaction Concepts">
+
+<p><em>Note: </em>Before reading further be sure to read the <a
+href="tutorial.html">introductory tutorial.</a></p>
+
+<p>Beginning with version 1.1 the Commons Transaction package features
+extended transaction support mechanisms. They are grouped around the
+new <a
+href="../apidocs/org/apache/commons/transaction/locking/LockManager2.html">lock
+manager</a> and its <a
+href="../apidocs/org/apache/commons/transaction/locking/GenericLockManager.html">implementation</a>
+that should be used as the only interface to access locks
+associated to some sort of transaction. To do so it offers you locking
+methods like <a
+href="../apidocs/org/apache/commons/transaction/locking/LockManager2.html#lock(java.lang.Object,%20java.lang.Object,%20int,%20int,%20boolean,%20long)">lock</a>
+and <a
+href="../apidocs/org/apache/commons/transaction/locking/LockManager2.html#tryLock(java.lang.Object,%20java.lang.Object,%20int,%20boolean)">tryLock</a>.</p>  
+
+<p>It is important for this manager to be central and have
+knowledge of all locking operations to perform tasks like <a href="deadlock.html">deadlock
+detection</a>, incorporate <a
+href="../apidocs/org/apache/commons/transaction/locking/LockManager2.html#startGlobalTimeout(java.lang.Object,%20long)">global
+transaction timeouts</a> and add convenience methods to <a
+href="../apidocs/org/apache/commons/transaction/locking/LockManager2.html#releaseAll(java.lang.Object)">release
+all locks</a> of a transaction.</p>  
+
+<p>Additional to the <a href="preference.html">preference feature</a>
+in the new <a href="../apidocs/org/apache/commons/transaction/locking/MultiLevelLock2.html">lock</a>, its <a
+href="../apidocs/org/apache/commons/transaction/locking/GenericLock.html">implementation</a>
+has some internal means to record all requests that wait for
+(partially) acquiring a lock in the sequence they occur. This is
+used by the deadlock detection in the lock manager. Another possible
+use is in custom implementations of fair scheduling lock
+mechanisms. Even though the specific protected methods 
+<a
+href="../apidocs/org/apache/commons/transaction/locking/GenericLock.html#registerWaiter(org.apache.commons.transaction.locking.GenericLock.LockOwner)">registerWaiter</a>
+and
+<a
+href="../apidocs/org/apache/commons/transaction/locking/GenericLock.html#unregisterWaiter(org.apache.commons.transaction.locking.GenericLock.LockOwner)">unregisterWaiter</a>
+and field 
+<a
+href="../apidocs/org/apache/commons/transaction/locking/GenericLock.html#waitingOwners">waitingOwners</a> are not made available
+through interfaces subclasses can still use them and even make their means public.</p> 
+</section>
+
+</body>
+</document>

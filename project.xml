@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project>
+  <pomVersion>3</pomVersion>
+  <name>Transaction</name>
+  <groupId>commons-transaction</groupId>
+  <artifactId>commons-transaction</artifactId>
+  <logo>/images/transaction-logo-white.png</logo>
+  <inceptionYear>2004</inceptionYear>
+  <shortDescription>Commons Transaction</shortDescription>
+  <description>Commons Transaction</description>
+
+  <currentVersion>1.3-dev</currentVersion>
+
+  <url>http://commons.apache.org/${pom.artifactId.substring(8)}/</url>
+  <package>org.apache.commons.${pom.artifactId.substring(8)}</package>
+
+  <organization>
+    <name>The Apache Software Foundation</name>
+    <url>http://commons.apache.org/</url>
+    <logo>http://commons.apache.org/images/logo.png</logo>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>/LICENSE.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <gumpRepositoryId>commons</gumpRepositoryId>
+  <issueTrackingUrl>http://issues.apache.org/jira/browse/${pom.artifactId.substring(8).toUpperCase()}</issueTrackingUrl>
+  <siteAddress>minotaur.apache.org</siteAddress>
+  <siteDirectory>/www/commons.apache.org/${pom.artifactId.substring(8)}/</siteDirectory>
+  <distributionDirectory>/www/people.apache.org/builds/commons/${pom.artifactId.substring(8)}/</distributionDirectory>
+  
+  <repository>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/commons/proper/${pom.artifactId.substring(8)}/trunk</connection>
+    <url>http://svn.apache.org/repos/asf/commons/proper/${pom.artifactId.substring(8)}/trunk/</url>
+  </repository>
+  
+  <mailingLists>
+    <mailingList>
+      <name>Commons Dev List</name>
+      <subscribe>dev-subscribe@commons.apache.org</subscribe>
+      <unsubscribe>dev-unsubscribe@commons.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/mod_mbox/commons-dev/</archive>
+    </mailingList>
+    <mailingList>
+      <name>Commons User List</name>
+      <subscribe>user-subscribe@commons.apache.org</subscribe>
+      <unsubscribe>user-unsubscribe@commons.apache.org</unsubscribe>
+      <archive>http://mail-archives.apache.org/mod_mbox/commons-user/</archive>
+    </mailingList>
+  </mailingLists>
+
+  <developers>
+    <developer>
+      <name>Oliver Zeigermann</name>
+      <id>ozeigermann</id>
+      <email>ozeigermann@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Stefan Lützkendorf</name>
+      <id>luetzkendorf</id>
+      <email>luetzkendorf@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>James Mason</name>
+      <id>masonjm</id>
+      <email>masonjm@apache.org</email>
+      <organization></organization>
+      <timezone>-8</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Daniel Florey</name>
+      <id>dflorey</id>
+      <email>dflorey@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Jörg Heinicke</name>
+      <id>joerg</id>
+      <email>joerg@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  
+  <contributors>
+    <contributor>
+      <name>Antranig Basman</name>
+    </contributor>
+    <contributor>
+      <name>Armin Waibel</name>
+      <email>arminw@apache.org</email>
+      <timezone>+1</timezone>
+    </contributor>
+    <contributor>
+      <name>John Rousseau</name>
+      <email>JRRousseau@gmail.com</email>
+    </contributor>
+  </contributors>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-j2ee-connector_1.5_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jta_1.0.1B_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-servlet_2.4_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <properties>
+        <scope>test</scope>
+      </properties>
+    </dependency>
+
+    <!-- these two are required by maven -->
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+      <version>2.0.2</version>
+      <properties>
+        <optional>true</optional>
+      </properties>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xerces</artifactId>
+      <version>2.0.2</version>
+      <properties>
+        <optional>true</optional>
+      </properties>
+    </dependency>
+    <!-- /these two are required by maven -->
+
+    <dependency>
+      <groupId>maven</groupId>
+      <artifactId>maven-xdoc-plugin</artifactId>
+      <version>1.9.2</version>
+      <url>http://maven.apache.org/maven-1.x/reference/plugins/xdoc/</url>
+      <type>plugin</type>
+      <properties>
+          <comment>
+              &lt;strong&gt;Site Only&lt;/strong&gt; - v1.9.2 (minimum)
+          </comment>
+          <optional>true</optional>
+      </properties>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <nagEmailAddress>dev@commons.apache.org</nagEmailAddress>
+    <sourceDirectory>src/java</sourceDirectory>
+    <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+    <integrationUnitTestSourceDirectory/>
+    <aspectSourceDirectory/>
+    <unitTest>
+      <includes>
+        <include>org/apache/commons/transaction/file/FileResourceManagerTest.java</include>
+        <include>org/apache/commons/transaction/memory/MapWrapperTest.java</include>
+        <include>org/apache/commons/transaction/memory/OptimisticMapWrapperTest.java</include>
+        <include>org/apache/commons/transaction/memory/PessimisticMapWrapperTest.java</include>
+        <include>org/apache/commons/transaction/locking/GenericLockTest.java</include>
+        <include>org/apache/commons/transaction/locking/LockTestRepeatableReads.java</include>
+      </includes>
+    </unitTest>
+    <resources>
+      <resource>
+        <directory>.</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>NOTICE.txt</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+
+  <reports>
+    <report>maven-changelog-plugin</report>
+    <report>maven-developer-activity-plugin</report>
+    <report>maven-file-activity-plugin</report>
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-license-plugin</report>
+    <report>maven-tasklist-plugin</report>
+  </reports>
+
+</project>

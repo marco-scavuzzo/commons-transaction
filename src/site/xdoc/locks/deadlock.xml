@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Locking: Deadlocks</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Deadlocks">
+ <p>A deadlock describes the scenario where two or more threads are
+ mutually blocking each other. Each waits for the other to release its
+ lock which will never happen as no thread can perform any
+ action. Consider the following figure for illustration this. Thread #1 holds locks
+a, b and c and waits for lock d. Thread #2 holds locks d and e and
+waits for lock b. As lock d is owner by Thread #2, Thread #1 can not
+ continue before Thread #2 releases it. Now Thread #2 waits for lock b
+ which is turn is owner by Thread #1.</p>
+
+<center>
+<img src="deadlock1.png"/>
+</center>
+
+<p> Neither thread will ever be able
+ to release any locks as both executions are blocked: the whole scene is dead!
+</p>
+
+  <subsection name="How does deadlock detection work?">
+
+<p>Theoretically, deadlock detection is pretty simple. First you have threads
+that own locks, then you have threads that wait for locks to
+acquire. Now you can think of a directed graph where you have
+threads and locks being nodes and each lock ownership and lock wait is
+a vertex that connects those nodes. When you have a cycle in that
+graph, i.e. when you can traverse the (directed!) graph starting from a certain
+node and you can reach that node again, you have a deadlock. This
+means a thread waits for itself to release a lock to 
+finally acquire a desired lock. Obviously, this will never happen
+without taking additional actions from the outside. Such an action
+could be to release the block for one thread telling it that there was
+a deadlock and the thread shall resolve it now it is able to perform actions.</p>
+<p>This can be illustrated with the above figure. Traversing the graph starting from Thread #1 going
+over lock b, Thread #2, lock d and finally Thread #1 (again) reveals
+the cycle and thus the deadlock. Note that of course you could just as
+well have started with Thread #2 and would have revealed the same cycle.
+</p>
+
+  </subsection>
+
+  <subsection name="How does deadlock detection work for commons transaction?">
+
+<p>In case of commons transaction things are a bit more complicated
+as a lock can have multiple (compatible) threads or better to say
+owners - lock ownership is not directly tied to the thread accessing
+the lock, but to an Object called owner. It can well be possible
+that an owner can both (partially) own a lock and wait for it as
+well. This may sound confusing, but actually becomes pretty obvious
+when you look at this example. There is a read/write lock and both owner #1
+and #2 hold a read lock which of course is compatible. Now when owner
+#1 ties to acquire a write lock it will have to wait for owner #2 to
+release its read lock. In such a case owner #1 both (partially) holds
+the lock and waits for it as illustrated by the following figure.</p>
+
+<center>
+<img src="deadlock2.png"/>
+</center>
+
+<p>The above algorithm would detect a deadlock. This of course is not there
+as owner #1 is blocked, but owner #2 is not and may finally release the read
+lock. This means the scenario is not dead.</p>
+<p>Obviously, the wait set of the lock is the problem. The graph does not
+tell us why owner #1 is waiting. In fact it does not wait for owner #1, but
+only for owner #2. Lookig at the next figure we see this. Both owners
+only own part of the lock and owner #1 is waiting for that part of
+the lock that owner #2 owns. 
+</p>
+
+<center>
+<img src="deadlock3.png"/>
+</center>
+
+<p>Thus the algorithm has to be modified in such a way that only the
+  real conflicting parts of the locks are taken into consideration. </p>
+  </subsection>
+
+  <subsection name="The real algorithm">
+
+<p>This algorithm checks if the given owner is part of a deadlock. by traversing all paths of the lock/owner
+depedency graph as described above. The graph is directed, so it is
+clear in which direction we are traversing it. Please note that no
+physical graph is constructed, but is implicite in the code and the
+stack structure.</p>
+
+<pre>
+1 : <B><FONT COLOR="#A020F0">protected</FONT></B> <B><FONT COLOR="#A020F0">boolean</FONT></B> wouldDeadlock(Object ownerId, Set path) {
+2 :     path.add(ownerId);
+3 :     Set locks = (Set) globalOwners.get(ownerId);
+4 :     <B><FONT COLOR="#A020F0">for</FONT></B> (Iterator i = locks.iterator(); i.hasNext();) {
+5 :         GenericLock mylock = (GenericLock) i.next();
+6 :         Collection conflicts = mylock.getConflictingWaiters(ownerId);
+7 :         <B><FONT COLOR="#A020F0">for</FONT></B> (Iterator j = conflicts.iterator(); j.hasNext();) {
+8 :             Object waitingOwnerId = j.next();
+9 :             <B><FONT COLOR="#A020F0">if</FONT></B> (path.contains(waitingOwnerId)) {
+10:                 <B><FONT COLOR="#A020F0">return</FONT></B> <B><FONT COLOR="#A020F0">true</FONT></B>;
+11:             } <B><FONT COLOR="#A020F0">else</FONT></B> <B><FONT COLOR="#A020F0">if</FONT></B> (wouldDeadlock(waitingOwnerId, path)) {
+12:                 <B><FONT COLOR="#A020F0">return</FONT></B> <B><FONT COLOR="#A020F0">true</FONT></B>;
+13:             }
+14:         }
+15:     }
+16:     path.remove(ownerId);
+17:     <B><FONT COLOR="#A020F0">return</FONT></B> <B><FONT COLOR="#A020F0">false</FONT></B>;
+18: }
+</pre>
+
+<p>In <em>lines 3-5</em> it inspects all locks it (partially) holds and finds the
+owners that are currently waiting for given owner. As explained above
+<em>lines 6-8</em> GenericLock#getConflictingWaiters does not traverse all owners waiting for the lock, but only those that are
+waiting for the part of the lock acquired by the given owner. Those
+owners will need investigation if the current owner - or anyone else
+waiting for it - is also waiting for them. If so we have a deadlock.</p>
+
+<p>Both to guarantee termination and actually find out if there is such a
+cycle indicating a deadlock in the graph <em>lines 2 and 16</em> we
+remember the owners of all paths we traverse. As the sequence is not
+important we store them in a set for fast access. In <em>lines
+9-10</em> we check if the owner already is in our path and if so we
+have been here before which means there is a cycle in the graph and we
+thus have a deadlock. If not, in <em>lines 11-12</em> we recursively repeat the check for each owner that
+waits for us. As the graph is directed and finite this algorithm
+either terminates with false in <em>line 17</em> or there is a cycle
+in it which will be detected as explained above and will lead to a
+termination with true. You can see that in both cases the algorithm terminates.</p>
+
+  </subsection>
+
+</section>
+
+</body>
+</document>

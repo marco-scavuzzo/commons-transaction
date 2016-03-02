@@ -1,0 +1,333 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Comparision of transactional map wrappers</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Comparision of transactional map wrappers">
+<p>
+</p>
+
+<table summary="" border="1" frame="HSIDES" rules="GROUPS" width="100%" cellpadding="3" cellspacing="0" dir="ltr" title="">
+
+<thead>
+<tr>
+<th align="left" valign="bottom" scope="col"></th>
+<th align="left" valign="bottom" scope="col"> <font face="Arial,
+Helvetica, sans-serif"><strong><a href="../apidocs/org/apache/commons/transaction/memory/TransactionalMapWrapper.html">TransactionalMapWrapper</a></strong></font></th>
+<th align="left" valign="bottom" scope="col"> <font face="Arial, Helvetica, sans-serif"><strong><a href="../apidocs/org/apache/commons/transaction/memory/OptimisticMapWrapper.html">OptimisticMapWrapper</a></strong></font></th>
+<th align="left" valign="bottom" scope="col"> <font face="Arial, Helvetica, sans-serif"><strong><a href="../apidocs/org/apache/commons/transaction/memory/PessimisticMapWrapper.html">PessimisticMapWrapper</a></strong></font></th>
+</tr>
+</thead>
+
+<tbody>
+<tr align="left" valign="top">
+<td> 
+
+<p>Lost update</p>
+
+</td>
+<td> 
+
+<p>Possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Dirty write</p>
+
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Dirty read</p>
+</td>
+<td> 
+
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Lost update</p>
+
+</td>
+<td> 
+
+<p>Possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Nonrepeatable read</p>
+</td>
+<td> 
+
+<p>Possible</p>
+
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Phantoms</p>
+</td>
+<td> 
+
+<p>Possible</p>
+</td>
+<td> 
+
+
+<p>Not possible</p>
+</td>
+<td> 
+
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Read Skew</p>
+
+</td>
+<td> 
+
+<p>Possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Write Skew</p>
+
+</td>
+<td> 
+
+<p>Possible</p>
+</td>
+<td> 
+
+<p>Possible</p>
+</td>
+<td> 
+
+<p>Not possible</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+
+<p>Readers block writers</p>
+</td>
+<td> 
+
+<p>No</p>
+</td>
+<td> 
+
+<p>No</p>
+</td>
+<td> 
+
+<p>Yes</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Writers block readers</p>
+
+</td>
+<td> 
+
+<p>No</p>
+</td>
+<td> 
+
+<p>No</p>
+</td>
+<td> 
+
+<p>Yes</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Writers block writers</p>
+</td>
+<td> 
+
+<p>No</p>
+
+</td>
+<td> 
+
+<p>No</p>
+
+</td>
+<td> 
+
+<p>Yes</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Might deadlock</p>
+</td>
+<td> 
+
+<p>No</p>
+
+</td>
+<td> 
+
+<p>No</p>
+
+</td>
+<td> 
+
+<p>Yes</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Commit might fail</p>
+</td>
+<td> 
+
+<p>No</p>
+
+</td>
+<td> 
+
+<p>Yes</p>
+
+</td>
+<td> 
+
+<p>No</p>
+</td>
+</tr>
+
+<tr align="left" valign="top">
+<td> 
+
+<p>Isolation Level</p>
+
+</td>
+<td> 
+
+<p>Read Committed (with lost updates possible)</p>
+</td>
+<td> 
+
+<p>Snapshot (Oracle would call it Serializable)</p>
+</td>
+<td> 
+
+<p>Serializable</p>
+</td>
+</tr>
+
+</tbody>
+</table>
+</section>
+
+</body>
+</document>

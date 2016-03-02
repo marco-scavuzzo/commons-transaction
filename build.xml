@@ -1,0 +1,547 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- 
+  =======================================================================
+  Commons Transaction build file
+  ======================================================================= 
+-->
+<project name="commons-transaction" default="jar" basedir=".">
+
+  <!-- 
+  ===================================================================
+  Set build properties
+  =================================================================== 
+  -->
+
+  <property file="${basedir}/build.properties"/>
+
+  <property name="compile.source" value="1.3" />
+  <property name="compile.target" value="1.3" />
+  <property name="compile.debug" value="true" />
+  <property name="compile.deprecation" value="true" />
+  <property name="compile.optimize" value="true" />
+
+  <property name="version" value="1.3-dev"/>
+  <property name="name" value="commons-transaction" />
+  <property name="title" value="Commons Transaction" />
+  <property name="package" value="org.apache.commons.transaction" />
+  <property name="final.name" value="${name}-${version}"/>
+
+  <!-- 
+  ===================================================================
+  Set the properties related to the source tree
+  =================================================================== 
+  -->
+
+  <property name="src.dir" value="${basedir}/src"/>
+  <property name="java.dir" value="${src.dir}/java"/>
+  <property name="java1.4.dir" value="${src.dir}/java1.4"/>
+  <property name="test.dir" value="${src.dir}/test"/>
+  <property name="lib.dir" value="${basedir}/lib"/>
+  <property name="conf.dir" value="${src.dir}/conf"/>
+  <property name="example.dir" value="${basedir}/example"/>
+
+  <!-- 
+  ===================================================================
+  Set the properties for the build area
+  =================================================================== 
+  -->
+  <property name="ibiblio.url" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="build.classes" value="${build.dir}/classes"/>
+  <property name="build.lib" value="${build.dir}/lib"/>
+  <property name="build.deploy" value="${build.dir}/deploy"/>
+  <property name="build.src.dist" value="${build.dir}/src"/>
+  <property name="build.bin.dist" value="${build.dir}/bin"/>
+  <property name="build.doc" value="${build.dir}/doc"/>
+  <property name="build.javadocs" value="${build.doc}/apidocs"/>
+
+  <property name="dist.dir" value="${basedir}/dist"/>
+  <property name="dist.lib" value="${dist.dir}/lib"/>
+  <property name="dist.deploy" value="${dist.dir}/deploy"/>
+
+  <path id="classpath">
+    <pathelement location="${build.classes}" />
+    <fileset dir="${lib.dir}"/>
+  </path>
+
+  <!-- 
+  ===================================================================
+  Detect
+  =================================================================== 
+  -->
+  <target name="detect" depends="detect.display,detect.fail" description="Display configuration and conditional compilation flags"/>
+
+  <target name="detect.display">
+    <condition property="java1.4.present">
+      <or>
+        <equals arg1="${ant.java.version}" arg2="1.4"/>
+        <equals arg1="${ant.java.version}" arg2="1.5"/>
+        <equals arg1="${ant.java.version}" arg2="1.6"/>
+      </or>
+    </condition>
+    <available property="jta.present" classname="javax.transaction.Status" classpathref="classpath"/>
+    <available property="jca.present" classname="javax.resource.cci.Connection" classpathref="classpath"/>
+    <available property="servlet.present" classname="javax.servlet.Servlet" classpathref="classpath"/>
+    <echo message="+-------------------------------------------------------"/>
+    <echo message="| Build environment for ${name} ${version}"/>
+    <echo message="| "/>
+    <echo message="| Note: "/>
+    <echo message="|   If ${property.name} is displayed for a library "/>
+    <echo message="|   instead of 'true', that library is not present."/>
+    <echo message="+-------------------------------------------------------"/>
+    <echo message=""/>
+    <echo message="Environment:"/>
+    <echo message="  Java home                            ${java.home}"/>
+    <echo message="  Java version                         ${ant.java.version}"/>
+    <echo message=""/>
+    <echo message="Build options:"/>
+    <echo message="  Generate debugging info              ${compile.debug}"/>
+    <echo message="  Display deprecation info             ${compile.deprecation}"/>
+    <echo message="  Optimize                             ${compile.optimize}"/>
+    <echo message=""/>
+    <echo message="Directories:"/>
+    <echo message="  Build directory                      ${build.dir}"/>
+    <echo message="  Distribution directory               ${dist.dir}"/>
+    <echo message="  JBoss deploy directory               ${jboss.deploy.dir}"/>
+    <echo message=""/>
+    <echo message="Optional Libraries:"/>
+    <echo message="  Java Transaction API                 ${jta.present}"/>
+    <echo message="  J2EE Connection Architecture API     ${jca.present}"/>
+    <echo message="  Servlet API                          ${servlet.present}"/>
+    <echo message="  Java 1.4                             ${java1.4.present}"/>
+    <echo message=""/>
+    <condition property="required.present">
+      <and>
+        <equals arg1="${jta.present}" arg2="true"/>
+        <equals arg1="${jca.present}" arg2="true"/>
+        <equals arg1="${servlet.present}" arg2="true"/>
+      </and>
+    </condition>
+  </target>
+  
+  <target name="detect.fail" unless="required.present">
+    <fail message="Failed dependency">
+      One or more required libraries could not be found.
+      Please check your build.propertes file.
+    </fail>
+  </target>
+  <!-- 
+  ===================================================================
+  Prepare the build              
+  =================================================================== 
+  -->
+
+  <target name="prepare">
+    <tstamp />
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.doc}"/>
+    <mkdir dir="${build.javadocs}"/>
+    <mkdir dir="${build.classes}"/>
+    <mkdir dir="${build.lib}"/>
+    <mkdir dir="${build.deploy}"/>
+    <mkdir dir="${lib.dir}"/>
+  </target>
+
+  <!-- 
+  ===================================================================
+  Prepare distributions
+  =================================================================== 
+  -->
+
+  <target name="prepare-dist">
+    <tstamp />
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${dist.lib}"/>
+    <mkdir dir="${dist.deploy}"/>
+  </target>
+
+  <!-- 
+  ===================================================================
+  Build the code           
+  =================================================================== 
+  -->
+
+  <target name="build" depends="prepare,download,detect" description="Compiles the main classes">
+    <javac destdir="${build.classes}"
+      source="${compile.source}"
+      target="${compile.target}"
+      debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+      optimize="${compile.optimize}" >
+      <src path="${java.dir}"/>
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+  
+  <target name="build-test" depends="detect,build">
+    <javac destdir="${build.classes}"
+      source="${compile.source}"
+      target="${compile.target}"
+      debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+      optimize="${compile.optimize}" >
+      <src path="${test.dir}"/>
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+  
+  <target name="build-jca" depends="build" if="java1.4.present">
+    <javac destdir="${build.classes}"
+      source="${compile.source}"
+      target="${compile.target}"
+      debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+      optimize="${compile.optimize}" >
+      <src path="${java1.4.dir}"/>
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+  
+  <target name="build-map-example" depends="build-jca" if="java1.4.present">
+    <javac destdir="${build.classes}"
+      source="${compile.source}"
+      target="${compile.target}"
+      debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+      optimize="${compile.optimize}" >
+      <src path="${example.dir}/mapConnector/src/java"/>
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+  
+  <!-- 
+  =================================================================== 
+  Create the jar
+  =================================================================== 
+  -->
+  <target name="jar" depends="detect, build, build-jca" description="Creates the jar">
+    <mkdir dir="${build.classes}/META-INF"/>
+    <copy file="LICENSE.txt" tofile="${build.classes}/META-INF/LICENSE.txt"/>
+    <copy file="NOTICE.txt" tofile="${build.classes}/META-INF/NOTICE.txt"/>
+             
+    <tstamp/>
+    <copy todir="${build.classes}/META-INF" filtering="on">
+      <filterset>
+        <filter token="name" value="${name}"/>
+        <filter token="title" value="${title}"/>
+        <filter token="package" value="${package}"/>
+        <filter token="version" value="${version}"/>
+      </filterset>
+      <fileset dir="${conf.dir}" includes="*.MF"/>
+    </copy>
+             
+    <jar jarfile="${build.lib}/${final.name}.jar" basedir="${build.classes}" manifest="${build.classes}/META-INF/MANIFEST.MF" >
+      <include name="org/apache/**" />
+      <include name="**/NOTICE.txt"/>
+      <include name="**/LICENSE.txt"/>
+      <exclude name="**/*Test*" />
+    </jar>
+
+    <copy todir="${dist.lib}">
+      <fileset dir="${build.lib}"/>
+    </copy>
+
+  </target>
+
+  <!-- 
+  =================================================================== 
+  Create rar
+  =================================================================== 
+  -->
+
+  <target name="map-connector" depends="detect, prepare-dist, jar, build-jca">
+
+    <zip zipfile="${build.deploy}/${final.name}.rar">
+      <zipfileset dir="${dist.lib}"/>
+      <zipfileset dir="${lib.dir}"/>
+      <zipfileset dir="${conf.dir}/connector/map" prefix="META-INF" includes="ra.xml"/>
+    </zip>
+
+    <copy todir="${dist.deploy}">
+      <fileset dir="${build.deploy}"/>
+      <fileset dir="${conf.dir}/connector/map/jboss"/>
+    </copy>
+
+  </target>
+
+  <!-- 
+  =================================================================== 
+  Create map connector example war
+  =================================================================== 
+  -->
+
+  <target name="map-example-war" depends="detect, prepare-dist, jar, build-map-example">
+
+    <zip zipfile="${build.deploy}/mapconnector-example.war">
+      <zipfileset dir="${build.classes}/connector" prefix="WEB-INF/classes/connector" includes="TestServlet.class"/>
+      <zipfileset dir="${example.dir}/mapConnector/src/conf" prefix="WEB-INF"/>
+    </zip>
+
+    <copy todir="${dist.deploy}">
+      <fileset dir="${build.deploy}"/>
+    </copy>
+
+  </target>
+
+  <!-- 
+  =================================================================== 
+  Deploy all deployable packages to JBoss
+  =================================================================== 
+  -->
+
+  <target name="deploy-jboss" depends="detect, map-connector, map-example-war">
+
+    <copy todir="${jboss.deploy.dir}">
+      <fileset dir="${dist.deploy}"/>
+    </copy>
+
+  </target>
+
+
+  <!--
+  ===================================================================
+  Cleans up build directories
+  ===================================================================
+  -->
+  <target name="clean">
+    <delete dir="${build.dir}" />
+    <delete dir="tmp" />
+  </target> 
+
+  <target name="clean-javadocs">
+    <delete dir="${build.javadocs}"/>
+  </target> 
+
+  <target name="scrub" depends="clean, clean-javadocs">
+    <delete dir="${dist.lib}"/>
+    <delete dir="${dist.deploy}"/>
+    <delete dir="${dist.dir}"/>
+  </target> 
+
+    <!-- =================================================================== -->
+    <!-- Build documentation                                                 -->
+    <!-- =================================================================== -->
+    <target name="doc" depends="prepare,javadocs"
+    description="Generate full documentation" />
+
+  <!--
+  ===================================================================
+  Creates the API documentation                             
+  =================================================================== 
+  -->
+  
+  <target name="javadocs" depends="build, clean-javadocs" description="Creates the API documentation">
+    <mkdir dir="${build.javadocs}"/>
+    <mkdir dir="${build.javadocs}"/>
+    <javadoc sourcepath="${java.dir}"
+      packagenames="org.apache.*"
+      destdir="${build.javadocs}"
+      author="true"
+      windowtitle="Commons Transaction API"
+      doctitle="Commons Transaction"
+      bottom="Copyright &#169; 2007 The Apache Software Foundation. All Rights Reserved."
+      classpathref="classpath">
+      <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+      <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+    </javadoc>
+  </target>
+  
+  <target name="all" depends="jar, doc"/>
+
+  <!-- 
+  ===================================================================
+  Do JUnit tests
+  =================================================================== 
+  -->
+  
+  <target name="test" depends="detect, build-test" description="Exectutes JUnit tests">
+    <mkdir dir="tmp"/>
+    <junit printsummary="yes" haltonfailure="yes">
+      <classpath refid="classpath" />
+      <formatter type="plain" />
+      <test name="org.apache.commons.transaction.file.FileResourceManagerTest" haltonfailure="yes" todir="tmp"/>
+      <test name="org.apache.commons.transaction.memory.MapWrapperTest" haltonfailure="yes" todir="tmp"/>
+      <test name="org.apache.commons.transaction.memory.OptimisticMapWrapperTest" haltonfailure="yes" todir="tmp"/>
+      <test name="org.apache.commons.transaction.memory.PessimisticMapWrapperTest" haltonfailure="yes" todir="tmp"/>
+      <test name="org.apache.commons.transaction.locking.GenericLockTest" haltonfailure="yes" todir="tmp"/>
+      <test name="org.apache.commons.transaction.locking.LockTestRepeatableReads" haltonfailure="yes" todir="tmp"/>
+    </junit>
+  </target>
+
+  <!-- 
+  ===================================================================
+  Distributions
+  =================================================================== 
+  -->
+
+  <target name="dist" depends="scrub,jar,javadocs,doc,test,dist-bin,dist-src" description="Create distribution">
+  </target>
+  
+  <target name="dist-bin">
+    <mkdir dir="${build.bin.dist}"/>
+    <copy todir="${build.bin.dist}">
+      <fileset dir=".">
+        <include name="LICENSE.txt"/>
+        <include name="NOTICE.txt"/>
+        <include name="README.txt"/>
+        <include name="RELEASE-NOTES.txt"/>
+      </fileset>
+    </copy>
+    <copy todir="${build.bin.dist}">
+      <fileset dir="${build.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${build.bin.dist}">
+      <fileset dir="${build.dir}">
+        <include name="doc/**"/>
+      </fileset>
+      <fileset dir="${basedir}">
+        <include name="lib/**"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="dist-src">
+    <mkdir dir="${build.src.dist}"/>
+    <copy todir="${build.src.dist}">
+      <fileset dir=".">
+        <include name="LICENSE.txt"/>
+        <include name="NOTICE.txt"/>
+        <include name="README.txt"/>
+        <include name="RELEASE-NOTES.txt"/>
+        <include name="build.properties.sample"/>
+        <include name="build.xml"/>
+        <include name="project.xml"/>
+        <include name="project.properties"/>
+      </fileset>
+    </copy>
+    <copy todir="${build.src.dist}">
+      <fileset dir="${build.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${build.src.dist}">
+      <fileset dir=".">
+        <include name="src/**"/>
+        <include name="xdocs/**"/>
+        <include name="example/**"/>
+        <include name="lib/**"/>
+      </fileset>
+      <fileset dir="${basedir}">
+        <include name="lib/**"/>
+      </fileset>
+    </copy>
+  </target>
+
+<!-- ====================================================================== -->
+
+  <target name="package" depends="scrub,dist,zip-bin,zip-src" description="Packages distribution">
+    <copy file="project.xml" tofile="${dist.dir}/${final.name}.pom" />
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.dir}/${final.name}.pom"/>
+    </antcall>
+    <copy file="${build.lib}/${final.name}.jar" tofile="${dist.dir}/${final.name}.jar" />
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.dir}/${final.name}.jar"/>
+    </antcall>
+  </target>
+  
+  <target name="zip-bin">
+    <tar longfile="gnu" tarfile="${dist.dir}/${final.name}.tar">
+      <tarfileset prefix="${final.name}" dir="${build.bin.dist}"/>
+    </tar>
+    <gzip zipfile="${dist.dir}/${final.name}.tar.gz" src="${dist.dir}/${final.name}.tar"/>
+    <delete file="${dist.dir}/${final.name}.tar" />
+    
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.dir}/${final.name}.tar.gz"/>
+    </antcall>
+
+    <zip zipfile="${dist.dir}/${final.name}.zip" >
+      <zipfileset prefix="${final.name}" dir="${build.bin.dist}"/>
+    </zip>
+      
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.dir}/${final.name}.zip"/>
+    </antcall>
+  </target>
+
+  <target name="zip-src">
+    <tar longfile="gnu" tarfile="${dist.dir}/${final.name}-src.tar">
+      <tarfileset prefix="${final.name}-src" dir="${build.src.dist}"/>
+    </tar>
+    <gzip zipfile="${dist.dir}/${final.name}-src.tar.gz" src="${dist.dir}/${final.name}-src.tar"/>
+    <delete file="${dist.dir}/${final.name}-src.tar" />
+    
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.dir}/${final.name}-src.tar.gz"/>
+    </antcall>
+
+    <zip zipfile="${dist.dir}/${final.name}-src.zip" >
+      <zipfileset prefix="${final.name}-src" dir="${build.src.dist}"/>
+    </zip>
+      
+    <antcall target="internal-md5">
+      <param name="path" value="${dist.dir}/${final.name}-src.zip"/>
+    </antcall>
+
+  </target>
+
+  <target name="internal-md5">
+    <basename property="_base" file="${path}"/>
+    <checksum file="${path}" property="md5"/>
+   	<echo message="${md5} *${_base}" file="${path}.md5"/>
+  </target>
+
+<!-- ========== Download Dependencies ===================================== -->
+
+  <target name="download" unless="dependencies.provided">
+
+    <echo message="Downloading Commons Codec jar..."/>
+    <get dest="${lib.dir}/commons-codec-1.2.jar" usetimestamp="true" ignoreerrors="true"
+          src="${ibiblio.url}/commons-codec/commons-codec/1.2/commons-codec-1.2.jar"/>
+
+    <echo message="Downloading Commons Logging jar..."/>
+    <get dest="${lib.dir}/commons-logging-1.1.jar" usetimestamp="true" ignoreerrors="true"
+          src="${ibiblio.url}/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
+
+    <echo message="Downloading JTA jar..."/>
+    <get dest="${lib.dir}/geronimo-jta_1.0.1B_spec-1.1.1.jar" usetimestamp="true" ignoreerrors="true"
+          src="${ibiblio.url}/org/apache/geronimo/specs/geronimo-jta_1.0.1B_spec/1.1.1/geronimo-jta_1.0.1B_spec-1.1.1.jar"/>
+
+    <echo message="Downloading J2EE Connector jar..."/>
+    <get dest="${lib.dir}/geronimo-j2ee-connector_1.5_spec-1.1.1.jar" usetimestamp="true" ignoreerrors="true"
+          src="${ibiblio.url}/org/apache/geronimo/specs/geronimo-j2ee-connector_1.5_spec/1.1.1/geronimo-j2ee-connector_1.5_spec-1.1.1.jar"/>
+
+    <echo message="Downloading Servlet jar..."/>
+    <get dest="${lib.dir}/geronimo-servlet_2.4_spec-1.1.1.jar" usetimestamp="true" ignoreerrors="true"
+          src="${ibiblio.url}/org/apache/geronimo/specs/geronimo-servlet_2.4_spec/1.1.1/geronimo-servlet_2.4_spec-1.1.1.jar"/>
+
+    <echo message="Downloading JUnit jar..."/>
+    <get dest="${lib.dir}/junit-3.8.jar" usetimestamp="true" ignoreerrors="true"
+          src="${ibiblio.url}/junit/junit/3.8/junit-3.8.jar"/>
+
+    <echo message="Downloading log4j jar..."/>
+    <get dest="${lib.dir}/log4j-1.2.8.jar" usetimestamp="true" ignoreerrors="true"
+          src="${ibiblio.url}/log4j/log4j/1.2.8/log4j-1.2.8.jar"/>
+
+  </target>
+
+</project>

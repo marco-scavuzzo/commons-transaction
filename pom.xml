@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific collectionsuage governing permissions and
+   limitations under the License.
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-parent</artifactId>
+    <version>28</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>commons-transaction</groupId>
+  <artifactId>commons-transaction</artifactId>
+  <version>1.3-SNAPSHOT</version>
+  <name>Commons Transaction</name>
+
+  <inceptionYear>2004</inceptionYear>
+  <description>Classes that aid concurrent programming in a transactional style.</description>
+
+  <url>http://commons.apache.org/transaction/</url>
+
+  <issueManagement>
+    <system>jira</system>
+    <url>http://issues.apache.org/jira/browse/TRANSACTION</url>
+  </issueManagement>
+
+  <scm>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/transaction/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/commons/proper/transaction/trunk</developerConnection>
+    <url>http://svn.apache.org/viewvc/commons/proper/transaction/trunk</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Oliver Zeigermann</name>
+      <id>ozeigermann</id>
+      <email>ozeigermann@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Stefan Lützkendorf</name>
+      <id>luetzkendorf</id>
+      <email>luetzkendorf@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>James Mason</name>
+      <id>masonjm</id>
+      <email>masonjm@apache.org</email>
+      <organization></organization>
+      <timezone>-8</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Daniel Florey</name>
+      <id>dflorey</id>
+      <email>dflorey@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Jörg Heinicke</name>
+      <id>joerg</id>
+      <email>joerg@apache.org</email>
+      <organization></organization>
+      <timezone>+1</timezone>
+      <roles>
+         <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
+  
+  <contributors>
+    <contributor>
+      <name>Antranig Basman</name>
+    </contributor>
+    <contributor>
+      <name>Armin Waibel</name>
+      <email>arminw@apache.org</email>
+      <timezone>+1</timezone>
+    </contributor>
+    <contributor>
+      <name>John Rousseau</name>
+      <email>JRRousseau@gmail.com</email>
+    </contributor>
+    <contributor>
+      <name>Peter Fassev</name>
+      <email>fassev at gmx dot de</email>
+    </contributor>
+    <contributor>
+      <name>Dennis Thrysøe</name>
+      <email>dth at conscius dot com</email>
+    </contributor>
+    <contributor>
+      <name>Holger Hoffstätte</name>
+      <email>holger dot hoffstaette at googlemail dot com</email>
+    </contributor>
+    <contributor>
+      <name>Peter Veentjer</name>
+    </contributor>
+  </contributors>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-j2ee-connector_1.5_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jta_1.0.1B_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-servlet_2.4_spec</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.8</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.3.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <commons.componentid>transaction</commons.componentid>
+    <commons.release.version>1.2</commons.release.version>
+    <commons.binary.suffix></commons.binary.suffix>
+    <commons.jira.id>TRANSACTION</commons.jira.id>
+    <commons.jira.pid>12310493</commons.jira.pid>
+  </properties>
+
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <name>Apache Commons Site</name>
+      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-transaction/</url>
+    </site>
+  </distributionManagement>
+
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/assembly/bin.xml</descriptor>
+            <descriptor>src/assembly/src.xml</descriptor>
+          </descriptors>
+          <tarLongFileMode>gnu</tarLongFileMode>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

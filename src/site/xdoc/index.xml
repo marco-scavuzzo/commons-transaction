@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Overview</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Status">
+<p>We have decided to move the project to dormant as we are convinced that the main
+advertised feature <em>transactional file access</em> can not be implemented reliably.
+We are convinced that no such implementation can be possible on top of an ordinary file system.
+Although there are other useful parts (as multi
+level locking including deadlock detection) the transactional file
+system is the main reason people use this library for. As it simply
+can not be made fully transactional, it does not work as advertised.
+</p>
+</section>
+
+<section name="The Transaction Component">
+<p>Commons Transaction aims at providing lightweight, standardized,
+well tested and 
+efficient implementations of utility classes commonly used in
+transactional Java programming. Initially there are implementations for
+multi level locks, 
+transactional collections and transactional file access. There may
+be additional implementations when the common need for them becomes
+obvious. However, the complete component shall remain compatible to
+JDK1.2 and should have minimal dependencies.</p>
+<p>The optimal - but maybe impudent - long term goal would be to create the transactional counterpart
+of <a
+href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html">Doug
+Lea's fabulous concurrent package</a> which recently made it to Java 5.0.</p> 
+
+
+<p>These are the initial parts in detail:
+<ul>
+<li><b><a href="maps/index.html">memory</a> package:</b>
+Contains a wrapper to make any map implementing interface
+<code>java.util.Map</code> transactional. 
+
+Depending on the type of the map that is wrapped this can either work as a
+transactional cache or some sort of volatile memory store.
+</li>
+
+<li>
+<b><a href="locks/index.html">locking</a> package:</b>
+Interfaces and implementations for locks that can have more than one
+owner at different compatible levels.
+</li>
+
+<li>
+<b><a href="file/index.html">file</a> package:</b>
+Implementation of transaction file access. Using a pessimistic
+locking schema this implementation features
+<em>serializable</em> transactions. 
+</li>
+
+<li>
+<b><em>util</em> package:</b> 
+Contains a collection of utility classes used by the transaction
+package itself. Of more general interest could be a rendezvous barrier
+and a file utility class.
+</li>
+</ul>
+</p>
+</section>
+
+<section name="Releases">
+    <p>
+       See the <a href="releases.html">releases</a> page for information on obtaining releases.
+    </p>
+</section>
+
+<section name="Documentation">
+  <p>
+     The <a href="apidocs/index.html">JavaDoc API documents</a> are available online.
+  </p>
+</section>
+
+</body>
+</document>

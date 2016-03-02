@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Locking</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Locking">
+ <p>Locking refers to the procedure of restricting access to certain
+ resources like objects or files on your hard disk. Such a restriction
+ might be necessary to guarantee validity and consistency of data in
+ concurrent scenarios. E.g. consider two independent threads trying to
+ write to one and the same file. The result would be undefined unless
+ same sort of restriction on access applied.</p>
+
+<p>Java already offers the
+ powerful and flexible high-level monitor concept. Every object
+ can be used as a monitor and an associated (invisible) lock is used
+ to protected critical secions in your code. Java 1.5 even introduces
+ explicite locking as an alternative. This may sound like there really is no need for additional locking
+classes - at least when you can use Java 1.5. If you can not it might
+be nice to have something like a well tested read/write lock. Such a
+lock allows many threads to acquire access when reading, but only a
+single one to write. Or a critical section that is protected by
+synchronized is not suffient for your needs and you want to lock a
+certain resource for a longer period of time. Of course you can get
+all this done with Object's wait and notify methods, but this really
+is error prone and unpleasant work.</p>
+
+<p>All this can be done with the locking package of the Transaction
+ Component. It offers multi level locks that allow you
+ to dramatically simplify many locking scenarios. In this locking
+ package you are not restricted to the usual lock types like e.g. an
+ exclusive lock or a read/write lock, but you have simple, but
+ powerful mechanisms to customize which lock types are
+ compatible. Maybe even more important, you are decoupled from threads
+ as the locking agents and are completely free to ascribe the lock to
+ a process, a request or any other Java object you would like. Both
+ the transactional maps and the transactional file system of this
+ component make heavy
+ use of them.
+ </p>
+<subsection name="Where go to from here?">
+<p>To learn more about multi level locks and how you can use them continue
+ with the <a href="tutorial.html">introductory tutorial</a>. It explains how
+ Jakarta Slide's WebDAV layer uses them to deadlock free avoid
+ conflicts. New features introduced in 1.1 are <a
+ href="concepts.html">extended transaction support</a> and <a
+ href="preference.html">general preferences for locks</a>. You can also find information about <a
+ href="deadlock.html">deadlocks and how they are handled in the
+ Commons Transaction package</a>. </p> 
+</subsection>
+
+</section>
+
+</body>
+</document>

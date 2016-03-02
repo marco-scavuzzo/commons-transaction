@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Preference Locks</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Preference Locks">
+
+<p><em>Note: </em>Before reading further be sure to read the <a
+href="tutorial.html">introductory tutorial.</a></p>
+
+
+<p>With the new <a href="../apidocs/org/apache/commons/transaction/locking/MultiLevelLock2.html">lock</a> and its <a
+href="../apidocs/org/apache/commons/transaction/locking/GenericLock.html">implementation</a>
+introduced in version 1.1 there now is the possibility to prefer
+certain lock request. If a lock is not directly available
+a preferred lock request will be fulfilled before any other request
+that is not preferred.</p> 
+
+<p>Putting preferences on certain lock levels is what the <a
+href="../apidocs/org/apache/commons/transaction/locking/ReadWriteLockManager.html">read/write
+lock manager</a> and the <a
+href="../apidocs/org/apache/commons/transaction/locking/ReadWriteUpgradeLockManager.html">read/write/upgrade
+lock manager</a> with their respective implementations for <a
+href="../apidocs/org/apache/commons/transaction/locking/ReadWriteLock.html">read/write</a>
+and <a
+href="../apidocs/org/apache/commons/transaction/locking/ReadWriteUpgradeLock.html">upgrade</a>
+locks do.</p>
+
+<p>For full flexibility there is an option to specify preference for any
+locking request both in the <a
+href="../apidocs/org/apache/commons/transaction/locking/LockManager2.html#lock(java.lang.Object,%20java.lang.Object,%20int,%20int,%20boolean,%20long)">lock
+manager</a> as well as in the <a
+href="../apidocs/org/apache/commons/transaction/locking/MultiLevelLock2.html#acquire(java.lang.Object,%20int,%20boolean,%20int,%20boolean,%20long)">lock</a>.</p>
+
+</section>
+
+</body>
+</document>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<document>
+
+ <properties>
+  <title>Transactional Map Wrappers</title>
+  <author email="dev@commons.apache.org">Commons Documentation Team</author>
+ </properties>
+
+ <body>
+
+<section name="Transactional Map Wrappers">
+ <p>One major part of the Transaction Component are a set of wrappers that allow to add transactional control
+to any kind of map implemening the <code>java.util.Map</code> interface. Transactional control refers 
+to the procedure that you start a transaction do a number of statements and finally decide to either
+commit the changes, i.e. make them permanent, or rather roll back the transaction by discarding all your changes.
+</p>
+
+<p>As an example imagine a client application where you do complex stuff (maybe 
+talking to one or more servers) and the user is allowed to cancel the 
+whole operation. Or it might be needed to be canceled because of errors that occur in the middle of the whole request. 
+Now image all the results have been stored in a transactional map and you 
+simply do a rollback on errors and a commit upon success.
+</p>
+
+<p>The whole thing gets a bit more complicated when more than one transaction is executed on a map at the same time. 
+	In this case these transactions are running <em>concurrently</em>. 
+	Problems that might occur with concurrent transaction are diverse and implementations differ in how much 
+	spurious phenomena can be observed. Here is a survey of the 
+	<a href="http://www.schemamania.org/jkl/booksonline/SQLBOL70/html/8_con_7a_1.htm">
+		most common concurrency problems</a> described in the scenario of authors working on documents.
+		Which phenomenon can occur with which map wrapper implementation can be found in
+	<a href="wrappers-comparision.html">this chart</a>. This is a
+	<a
+	href="http://www.cs.umb.edu/cs734/CritiqueANSI_Iso.pdf">great
+	more general article about different isolations</a>.  </p>
+<p>If none of
+the known phenomena is observable - which of course is the best you can get - a transaction is called <em>serializable</em>.
+ The origin of this term comes from a differet, but equivalent definition. This
+definition switches the perspective from local phenomena observed inside
+transactions to global one, more specific global corretctness. If a set of
+transactions are executed
+concurrently and there is a strictly sequential execution schedule of those transactions that leaves the
+map in the same state as the concurrent one those transactions are called <em>
+serializable</em>.
+</p>
+
+</section>
+
+</body>
+</document>
